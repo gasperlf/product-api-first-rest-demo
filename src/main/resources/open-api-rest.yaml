@@ -1,0 +1,169 @@
+openapi: 3.0.3
+info:
+  title: Product-API
+  description: Product-API
+  version: 1.0.0
+servers:
+  - url: https://localhost:8080/api/
+    description: DEV
+  - url: https://localhost:8088/api/
+    description: UAT
+tags:
+  - name: Products
+    description: Product RestController endpoints
+paths:
+  /products:
+    post:
+      tags:
+        - Products
+      summary: create product
+      operationId: createProduct
+      description: Create a new product in the system
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProductRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Get product by identifier
+      operationId: getProductById
+      description: Get product from the system by identifier
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/productIdPath'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  parameters:
+    productIdPath:
+      name: productId
+      in: path
+      description: product identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 5
+  requestBodies:
+    CreateProductRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductRequest'
+  responses:
+    CreateProductResponse:
+      description: Created product
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductResponse'
+    NoContent:
+      description: No Content
+    BadRequest:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    NotFound:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    ServiceUnavailable:
+      description: Service Unavailable
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+  schemas:
+    ProblemDetail:
+      title: ProblemDetail
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+    ProductRequest:
+      title: ProductRequest
+      type: object
+      properties:
+        name:
+          type: string
+          description: product name
+          example: 'MacBook PRO 14'
+    ProductResponse:
+      title: ProductResponse
+      type: object
+      properties:
+        id:
+          type: integer
+          description: product identifier
+          example: 1
+        name:
+          type: string
+          description: product name
+          example: 'MacBook PRO 14'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      in: header
+      scheme: bearer
+      bearerFormat: JWT

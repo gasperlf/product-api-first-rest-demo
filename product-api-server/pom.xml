@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.ontopsolutions</groupId>
+        <artifactId>product-api-first-rest-demo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>product-api-server</artifactId>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>net.ontopsolutions</groupId>
+            <artifactId>product-api-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.parser.v3</groupId>
+            <artifactId>swagger-parser</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>product-api-server</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${open-api-spec-file}</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <ignoreFileOverride>.openapi-generator-ignore</ignoreFileOverride>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModels>false</generateModels>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <apiNameSuffix>RestController</apiNameSuffix>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <apiPackage>net.ontopsolutions.product.api.rest</apiPackage>
+                            <modelPackage>net.ontopsolutions.product.api.model</modelPackage>
+                            <schemaMappings>
+                                DateTime=java.time.LocalDateTime
+                            </schemaMappings>
+                            <templateDirectory>${net.ontopsolutions.openapi.templates.directory}</templateDirectory>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <additionalModelTypeAnnotations>
+                                    @lombok.Builder;
+                                    @lombok.NoArgsConstructor;
+                                    @lombok.AllArgsConstructor;
+                                    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL);
+                                    @net.ontopsolutions.annotation.Age;
+                                </additionalModelTypeAnnotations>
+                                <interfaceOnly>true</interfaceOnly>
+                                <booleanGetterPrefix>is</booleanGetterPrefix>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
