@@ -36,6 +36,39 @@ paths:
           $ref: '#/components/responses/InternalServerError'
         '503':
           $ref: '#/components/responses/ServiceUnavailable'
+    get:
+      tags:
+        - Products
+      summary: Get products filter by
+      operationId: getProducts
+      description: Get products from the system filter by
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/pageQuery'
+        - $ref: '#/components/parameters/sizeQuery'
+        - name: sort
+          in: query
+          description: 'Sorting criteria in the format: property(,asc|desc).'
+          required: false
+          schema:
+           type: array
+           items:
+              type: string
+              example: "name,asc"
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
   /products/{productId}:
     get:
       tags:
@@ -71,6 +104,24 @@ components:
         type: integer
         format: int64
         example: 5
+    pageQuery:
+      name: page
+      in: query
+      description: page index (0...N)
+      schema:
+        type: integer
+        format: int32
+        example: 0
+        default: 00
+    sizeQuery:
+      name: size
+      in: query
+      description: Page size
+      schema:
+        type: integer
+        format: int32
+        example: 20
+        default: 20
   requestBodies:
     CreateProductRequest:
       content:
@@ -78,12 +129,6 @@ components:
           schema:
             $ref: '#/components/schemas/ProductRequest'
   responses:
-    CreateProductResponse:
-      description: Created product
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProductResponse'
     NoContent:
       description: No Content
     BadRequest:
@@ -122,6 +167,18 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetail'
+    CreateProductResponse:
+      description: Created product
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductResponse'
+    GetProductsResponse:
+      description: Get list of products
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductPageResponse'
   schemas:
     ProblemDetail:
       title: ProblemDetail
@@ -144,11 +201,17 @@ components:
     ProductRequest:
       title: ProductRequest
       type: object
+      required:
+        - price
       properties:
         name:
           type: string
           description: product name
           example: 'MacBook PRO 14'
+        price:
+          type: number
+          example: 10.99
+          x-field-extra-annotation: "@net.ontopsolutions.annotation.Price(message = \"This is a custom message\")"
     ProductResponse:
       title: ProductResponse
       type: object
@@ -161,6 +224,38 @@ components:
           type: string
           description: product name
           example: 'MacBook PRO 14'
+    ProductPageResponse:
+      title: ProductPageResponse
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+        totalElements:
+          type: integer
+          format: int64
+          description: Total elements in the content
+          example: 5
+        totalPages:
+          type: integer
+          format: int32
+          description: Total pages
+          example: 10
+        pageSize:
+          type: integer
+          description: Size elements
+          example: 20
+        currentPage:
+          type: integer
+          description: Current page
+          example: 0
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: http
