@@ -80,13 +80,21 @@
                             <generateSupportingFiles>true</generateSupportingFiles>
                             <apiPackage>net.ontopsolutions.product.api.client</apiPackage>
                             <modelPackage>net.ontopsolutions.product.api.model</modelPackage>
+                            <typeMappings>
+                                <!-- convert Double to BigDecimal -->
+                                <typeMapping>Double=java.math.BigDecimal</typeMapping>
+                                <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
+                            </typeMappings>
                             <schemaMappings>
-                                DateTime=java.time.LocalDateTime
+
                             </schemaMappings>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <!--suppress UnresolvedMavenProperty -->
-                                <additionalModelTypeAnnotations>@lombok.Builder;@lombok.AllArgsConstructor;
+                                <additionalModelTypeAnnotations>
+                                    @lombok.Builder;
+                                    @lombok.AllArgsConstructor;
                                 </additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>

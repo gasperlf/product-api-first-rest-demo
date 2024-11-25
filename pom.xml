@@ -37,6 +37,7 @@
 
         <!-- open api specification -->
         <open-api-spec-file>${project.basedir}/../src/main/resources/open-api-rest.yaml</open-api-spec-file>
+        <openapi.templates.directory>${project.basedir}/../src/main/resources/templates</openapi.templates.directory>
 
     </properties>
 

@@ -3,6 +3,9 @@ info:
   title: Product-API
   description: Product-API
   version: 1.0.0
+  contact:
+    name: Lewis Florez
+    email: gasper_lf@hotmail.com
 servers:
   - url: https://localhost:8080/api/
     description: DEV
@@ -10,7 +13,7 @@ servers:
     description: UAT
 tags:
   - name: Products
-    description: Product RestController endpoints
+    description: Product endpoint operations
 paths:
   /products:
     post:
@@ -102,7 +105,7 @@ components:
       required: true
       schema:
         type: integer
-        format: int64
+        format: int32
         example: 5
     pageQuery:
       name: page

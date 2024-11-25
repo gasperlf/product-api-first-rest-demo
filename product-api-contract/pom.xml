@@ -84,12 +84,18 @@
                             <generateSupportingFiles>true</generateSupportingFiles>
                             <apiPackage>net.ontopsolutions.product.api.rest</apiPackage>
                             <modelPackage>net.ontopsolutions.product.api.model</modelPackage>
+                            <typeMappings>
+                                <!-- convert Double to BigDecimal -->
+                                <typeMapping>Double=java.math.BigDecimal</typeMapping>
+                                <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
+                            </typeMappings>
                             <schemaMappings>
-                                DateTime=java.time.LocalDateTime
                             </schemaMappings>
-                            <templateDirectory>${net.ontopsolutions.openapi.templates.directory}</templateDirectory>
+                            <templateDirectory>${openapi.templates.directory}</templateDirectory>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <documentationProvider>springdoc</documentationProvider>
                                 <!--suppress UnresolvedMavenProperty -->
                                 <additionalModelTypeAnnotations>
                                     @lombok.Builder;
@@ -99,12 +105,12 @@
                                 </additionalModelTypeAnnotations>
                                 <interfaceOnly>true</interfaceOnly>
                                 <booleanGetterPrefix>is</booleanGetterPrefix>
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 

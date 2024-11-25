@@ -25,8 +25,8 @@ public class ProductRestController implements ProductsApi {
     }
 
     @Override
-    public ResponseEntity<ProductResponse> getProductById(Long productId) {
-        return ResponseEntity.ok(productService.getProductById(productId.intValue()));
+    public ResponseEntity<ProductResponse> getProductById(Integer productId) {
+        return ResponseEntity.ok(productService.getProductById(productId));
     }
 
     @Override
